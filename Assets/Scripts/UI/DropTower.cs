@@ -8,6 +8,7 @@ public class DropTower : MonoBehaviour
     public static DropTower instance;
     public currentState states;
     public GameObject TowerPrefab;
+    public GameObject ServicePanel;
     public Vector3 mouseOffset;
     public bool selected;
     public bool isSet;
@@ -36,7 +37,7 @@ public class DropTower : MonoBehaviour
         {
             TowerPrefab.GetComponent<TowerStick>().isSet = true;
             TowerPrefab.GetComponent<TowerStick>().towerIndex = towerList.Count;
-
+            
             isSet = true;
             //BtT.BtAntenna.interactable = true;
         }
@@ -50,6 +51,7 @@ public class DropTower : MonoBehaviour
                         case "Tower":
                             hit.transform.gameObject.GetComponent<TowerStick>().selectTower();
                             Debug.Log("You selected the " + hit.transform.name); // ensure you picked right object
+                            ServicePanel.SetActive(true);
                         break;
                     }
                 }else if (states == currentState.updateAntenna){

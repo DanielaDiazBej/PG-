@@ -28,12 +28,12 @@ public class TowerStick : MonoBehaviour {
         DropTower.instance.currentTowerSelected = towerIndex;
         DropTower.instance.updateTowers();
         ArrowModel.SetActive(true);
+
         DropTower.instance.botonesUI[0].interactable = false;
         DropTower.instance.botonesUI[1].interactable = true;
         DropTower.instance.updateStates(2);
     }
 
-    // Update is called once per frame
     void Update() {
         // RaycastHit HitInfo;
         // var hits = Physics.RaycastAll(transform.position + Vector3.up, Vector3.down, 20f);

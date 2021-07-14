@@ -38,15 +38,25 @@ public class BtTowers : MonoBehaviour
     }
     void BtTower2OnClick() {
         Tower2.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-        Instantiate(Tower2);
-        Debug.Log("Torre2");
-        BtAntenna.interactable = true;
+
+        GameObject towerInstance = Instantiate(Tower2);
+
+        DropTower.instance.towerList.Add(towerInstance);
+        DropTower.instance.TowerPrefab = towerInstance;
+        DropTower.instance.selected = true;
+
+        Debug.Log("Torre2");   
     }
     void BtTower3OnClick()
     {
         Tower3.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-        Instantiate(Tower3);
-        Debug.Log("Torre3");
-        BtAntenna.interactable = true;
+
+        GameObject towerInstance = Instantiate(Tower3);
+
+        DropTower.instance.towerList.Add(towerInstance);
+        DropTower.instance.TowerPrefab = towerInstance;
+        DropTower.instance.selected = true;
+
+        Debug.Log("Torre3");   
     }
 }
