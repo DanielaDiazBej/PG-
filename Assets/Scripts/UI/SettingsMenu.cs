@@ -6,14 +6,14 @@ using UnityEngine.UI;
 
 public class SettingsMenu : MonoBehaviour
 {
-
+  
     public AudioMixer audioMixer;
     public Dropdown resolutionDropdown;
     Resolution[] resolutions;
 
-
     void Start ()
     {
+
         resolutions = Screen.resolutions;
         resolutionDropdown.ClearOptions();
         List<string> options = new List<string>();
@@ -34,6 +34,7 @@ public class SettingsMenu : MonoBehaviour
         resolutionDropdown.value = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
     }
+ 
 
     public void SetResolution (int resolutionIndex)
     {
@@ -54,6 +55,11 @@ public class SettingsMenu : MonoBehaviour
     public void SetFullscreen (bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 
     
