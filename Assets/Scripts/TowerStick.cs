@@ -45,11 +45,10 @@ public class TowerStick : MonoBehaviour {
 
         if (Physics.Raycast(transform.position, forward, out hit, Mathf.Infinity))
         {
-            Debug.Log(hit.collider.name);
             Vector3 objectCenter = hit.collider.gameObject.transform.position;
 
             if (isSet && !ending) { 
-                if (hit.collider.transform.tag == "Building") {
+                if (hit.collider.transform.tag == "Ground") {
                     transform.localPosition = new Vector3(objectCenter.x, hit.point.y, objectCenter.z);   
                 }else{
                     transform.localPosition = new Vector3(transform.position.x, hit.point.y, transform.position.z);
@@ -61,8 +60,6 @@ public class TowerStick : MonoBehaviour {
             }
             //print("There is something in front of the object!");
             yPosition = hit.point.y;
-
-            Debug.Log("Posicion Y:" + yPosition);
         }
     }
 }
