@@ -11,23 +11,27 @@ public class PlayerController : MonoBehaviour
     private Vector3 Point;
 
     public CanvasController canvasController;
+    public ServiceController serviceController;
     public ServicePropController servicePropController;
+    public AntennaPropController antennaPropController;
 
     // The object of last tower selected
     private TowerController tempTowerSelected;
     private bool towerMode = false;
     public List<GameObject> TowersPrefab;
     public int towerSelected = 0;
-
+    public int serviceSelected = -1;
 
     // The object of last antenna selected
     private AntennaController tempAntennaSelected;
+    private Outline tempOutlinerAntennaSelected;
     private bool antennaMode = false;
     public List<GameObject> AntennasPrefab;
     public int antennaSelected = 0;
 
     private bool physicPMode = false;
 
+    public GameObject panelPropServices;
     public GameObject panelServices;
 
     // Start is called before the first frame update
@@ -68,11 +72,15 @@ public class PlayerController : MonoBehaviour
                     canvasController.changeBtAntenna(false);
                 }else if (hit.transform.tag == "Tower"){
                     TowerController towerController = hit.collider.gameObject.GetComponent<TowerController>();
+                    Outline outlineTowerController = hit.collider.gameObject.GetComponent<Outline>();
+
+                    outlineTowerController.OutlineWidth = 3f;
+
                     tempTowerSelected = towerController;
 
-                    if(towerController.service == "null"){
-                        panelServices.SetActive(true);
-                    }
+                    // Show services creates in the buttons
+                    serviceController.updateServicesSelected(tempTowerSelected.services[0].service, tempTowerSelected.services[1].service);
+                    panelServices.SetActive(true);
 
                     // Enable the antenna
                     canvasController.changeBtAntenna(true);
@@ -87,12 +95,17 @@ public class PlayerController : MonoBehaviour
                 }else if (hit.transform.tag == "Antenna"){
                     // Select antenna
                     AntennaController antennaController = hit.collider.gameObject.GetComponent<AntennaController>();
+                    Outline outlineAntennaController = hit.collider.gameObject.GetComponent<Outline>();
+
                     tempAntennaSelected = antennaController;
+                    tempOutlinerAntennaSelected = outlineAntennaController;
+                    tempOutlinerAntennaSelected.OutlineWidth = 2f;
 
                     // Send data of tower and antenna to the panel
-                    servicePropController.serviceSelected = tempTowerSelected.service;
-                    servicePropController.typeSelected = tempAntennaSelected.type;
-                    servicePropController.assingListFrequencyBand();
+                    antennaPropController.serviceSelected = tempTowerSelected.services[serviceSelected].service;
+                    antennaPropController.typeSelected = tempAntennaSelected.type;
+                    antennaPropController.assingListModulationDir();
+                    antennaPropController.assingListGain();
 
                     // Enable the antenna
                     canvasController.changeBtPhysicalP(true);
@@ -121,27 +134,37 @@ public class PlayerController : MonoBehaviour
     public void setPhysicPMode (bool value) {
         antennaMode = value;
     }
-
+    
     // Called from service panel
-    public void updateTowerService (string value){
-        tempTowerSelected.service = value;
+    public void selectService (int value){
+        if(tempTowerSelected.services[value].service == "null"){            
+            servicePropController.clearData();
+            servicePropController.assingListServices();
+            panelPropServices.SetActive(true);
+        }
+        serviceSelected = value;
     }
-
+   
     // Called from service prop panel
-    public void updateAntennaFreqBand (string value){
-        tempAntennaSelected.frequencyBand = value;
+    public void updateTowerService (string value){
+        tempTowerSelected.services[serviceSelected].service = value;
     }
-    public void updateAntennaModulation (string value){
-        tempAntennaSelected.modulation = value;
+    public void updateTowerFreqBand (string value){
+        tempTowerSelected.services[serviceSelected].frequencyBand = value;
     }
+    public void updateTowerTechnology (string value){
+        tempTowerSelected.services[serviceSelected].technology = value;
+    }
+    public void updateTowerModulation (string value){
+        tempTowerSelected.services[serviceSelected].modulation = value;
+    }
+    public void updateTowerPropagationModel (string value){
+        tempTowerSelected.services[serviceSelected].propagationModel = value;
+    }
+    
+    // Called from antenna prop panel
     public void updateAntennaModulationDir (string value){
         tempAntennaSelected.modulationDirection = value;
-    }
-    public void updateAntennaTechnology (string value){
-        tempAntennaSelected.technology = value;
-    }
-    public void updateAntennaPropagationModel (string value){
-        tempAntennaSelected.propagationModel = value;
     }
     public void updateAntennaModulationGain (string value){
         tempAntennaSelected.gain = value;
@@ -150,14 +173,23 @@ public class PlayerController : MonoBehaviour
     // Called from physic prop panel
     public void updateAntennaHeight (string value){
         tempAntennaSelected.height = value;
+        canvasController.changeBtCover(true);
     }
     public void updateAntennaInclination (string value){
         tempAntennaSelected.inclination = value;
+        canvasController.changeBtCover(true);
     }
     public void updateAntennaDirection (string value){
         tempAntennaSelected.direction = value;
+        canvasController.changeBtCover(true);
     }
     public void updateAntennaAzimut (string value){
         tempAntennaSelected.azimut = value;
+        canvasController.changeBtCover(true);
+    }
+
+    public void showHideCover(){
+        tempAntennaSelected.showHideCover(true);
+        tempOutlinerAntennaSelected.OutlineWidth = 0f;
     }
 }

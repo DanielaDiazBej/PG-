@@ -1,14 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TowerController : MonoBehaviour
-{    
-    public string service;
+{ 
+    public Service[] services;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 }

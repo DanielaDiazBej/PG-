@@ -7,40 +7,71 @@ public class ServicePropController : MonoBehaviour
 {
     public PlayerController player;
 
-    public GameObject panelPhysicProps;
-
+    public Dropdown serviceDropdown;
     public Dropdown frequencyBandDropdown;
     public Dropdown techDropdown;
     public Dropdown modulationDropdown;
-    public Dropdown modulationDirDropdown;
     public Dropdown propagationModelDropdown;
-    public Dropdown gainDropdown;
 
     public Button btnAccept;
 
-    public int frequencyBandVal, modulationVal, modulationDirVal, techVal, propagationModelVal, gainVal;
+    public int serviceVal, frequencyBandVal, techVal, modulationVal, propagationModelVal;
 
     public string serviceSelected;
-    public string typeSelected;
     public string frequencyBandSelected;
-    public string modulationSelected;
-    public string modulationDirSelected;
     public string techSelected;
+    public string modulationSelected;
     public string propagationModelSelected;
-    public string gainSelected;
     // Start is called before the first frame update
     void Start()
     {
         frequencyBandDropdown.interactable = false;
         techDropdown.interactable = false;
         modulationDropdown.interactable = false;
-        modulationDirDropdown.interactable = false;
         propagationModelDropdown.interactable = false;
-        gainDropdown.interactable = false;
-
         btnAccept.interactable = false;
     }
 
+    public void clearData () {
+        serviceDropdown.ClearOptions();
+        frequencyBandDropdown.ClearOptions();
+        techDropdown.ClearOptions();
+        modulationDropdown.ClearOptions();
+        propagationModelDropdown.ClearOptions();
+
+        frequencyBandDropdown.interactable = false;
+        techDropdown.interactable = false;
+        modulationDropdown.interactable = false;
+        propagationModelDropdown.interactable = false;
+    }
+
+    public void assingListServices()
+    {
+        // Clear dropdown
+        serviceDropdown.ClearOptions();
+
+        List<string> itemsServices = new List<string>() { "Selecciona una opción", "Televisión", "Punto a punto" };
+        serviceDropdown.AddOptions(itemsServices);
+
+    }
+    public void selectServices (int val) 
+    {
+        serviceSelected = serviceDropdown.options[val].text;
+
+        // Clear the next dropdowns
+        frequencyBandDropdown.interactable = false;
+        frequencyBandDropdown.ClearOptions();
+        techDropdown.interactable = false;
+        techDropdown.ClearOptions();
+        modulationDropdown.interactable = false;
+        modulationDropdown.ClearOptions();
+        propagationModelDropdown.interactable = false;
+        propagationModelDropdown.ClearOptions();
+        
+        // Enable the next dropdown
+        assingListFrequencyBand();
+    }
+    
     public void assingListFrequencyBand()
     {
         // Clear dropdown
@@ -57,7 +88,7 @@ public class ServicePropController : MonoBehaviour
             frequencyBandDropdown.AddOptions(itemsFB);
         }
         // Enable Dropdown
-        frequencyBandDropdown.interactable = true;
+        frequencyBandDropdown.interactable = true;    
     }
     public void selectFrequencyBand (int val) 
     {
@@ -68,12 +99,8 @@ public class ServicePropController : MonoBehaviour
         techDropdown.ClearOptions();
         modulationDropdown.interactable = false;
         modulationDropdown.ClearOptions();
-        modulationDirDropdown.interactable = false;
-        modulationDirDropdown.ClearOptions();
         propagationModelDropdown.interactable = false;
         propagationModelDropdown.ClearOptions();
-        gainDropdown.interactable = false;
-        gainDropdown.ClearOptions();
         
         // Enable the next dropdown
         assingListTech();
@@ -93,7 +120,7 @@ public class ServicePropController : MonoBehaviour
         //Punto a punto service
         if (frequencyBandSelected == "3G - 80G")
         {
-            List<string> itemsT = new List<string>() { "-" };
+            List<string> itemsT = new List<string>() { "Selecciona una opción", "-" };
             techDropdown.AddOptions(itemsT);
         }
         // Enable Dropdown
@@ -106,12 +133,6 @@ public class ServicePropController : MonoBehaviour
         // Clear the next dropdowns
         modulationDropdown.interactable = false;
         modulationDropdown.ClearOptions();
-        modulationDirDropdown.interactable = false;
-        modulationDirDropdown.ClearOptions();
-        propagationModelDropdown.interactable = false;
-        propagationModelDropdown.ClearOptions();
-        gainDropdown.interactable = false;
-        gainDropdown.ClearOptions();
         
         // Enable the next dropdown
         assingListModulation();
@@ -147,52 +168,8 @@ public class ServicePropController : MonoBehaviour
         modulationSelected = modulationDropdown.options[val].text;
 
         // Clear the next dropdowns
-        modulationDirDropdown.interactable = false;
-        modulationDirDropdown.ClearOptions();
         propagationModelDropdown.interactable = false;
         propagationModelDropdown.ClearOptions();
-        gainDropdown.interactable = false;
-        gainDropdown.ClearOptions();
-        
-        // Enable the next dropdown
-        assingListModulationDir();
-    }
-
-     public void assingListModulationDir()
-    {
-        // Clear dropdown
-        modulationDirDropdown.ClearOptions();
-
-        if (serviceSelected == "Televisión")
-        {
-            if (typeSelected == "Directiva")
-            {
-                List<string> itemsMD = new List<string>() { "Selecciona una opción", "45", "60", "90" };
-                modulationDirDropdown.AddOptions(itemsMD);
-            }
-            else if (typeSelected == "Omnidireaccional")
-            {
-                List<string> itemsMD = new List<string>() { "Selecciona una opción", "360" };
-                modulationDirDropdown.AddOptions(itemsMD);
-            }
-        }
-        if (serviceSelected == "Punto a punto")
-        {
-            List<string> itemsMD = new List<string>() { "Selecciona una opción", "0", "1", "2", "3", "5", "10" };
-            modulationDirDropdown.AddOptions(itemsMD);
-        }
-        // Enable Dropdown
-        modulationDirDropdown.interactable = true;    
-    }
-    public void selectModulationDir (int val) 
-    {
-        modulationDirSelected = modulationDirDropdown.options[val].text;
-
-        // Clear the next dropdowns
-        propagationModelDropdown.interactable = false;
-        propagationModelDropdown.ClearOptions();
-        gainDropdown.interactable = false;
-        gainDropdown.ClearOptions();
         
         // Enable the next dropdown
         assingListPropagationModel();
@@ -210,7 +187,7 @@ public class ServicePropController : MonoBehaviour
         }
         if (serviceSelected == "Punto a punto")
         {
-            List<string> itemsPM = new List<string>() { "Selecciona una opción" };
+            List<string> itemsPM = new List<string>() { "Selecciona una opción", "-" };
             propagationModelDropdown.AddOptions(itemsPM);
         }
         // Enable Dropdown
@@ -220,50 +197,19 @@ public class ServicePropController : MonoBehaviour
     {
         propagationModelSelected = propagationModelDropdown.options[val].text;
 
-        // Clear the next dropdowns
-        gainDropdown.interactable = false;
-        gainDropdown.ClearOptions();
-        
-        // Enable the next dropdown
-        assingListGain();
-    }
-
-    public void assingListGain()
-    {
-        // Clear dropdown
-        gainDropdown.ClearOptions();
-
-        if (serviceSelected == "Televisión")
-        {
-            List<string> itemsG = new List<string>() { "Selecciona una opción", "3", "6", "9", "12" };
-            gainDropdown.AddOptions(itemsG);
-        }
-        if (serviceSelected == "Punto a punto")
-        {
-            List<string> itemsG = new List<string>() { "Selecciona una opción", "20", "30", "40", "50" };
-            gainDropdown.AddOptions(itemsG);
-        }
-        // Enable Dropdown
-        gainDropdown.interactable = true;  
-    }
-    public void selectGain (int val) 
-    {
-        gainSelected = gainDropdown.options[val].text;
-
         // Validate that dropdown selected an option
-        if(gainSelected != "Seleccione una opción")
+        if(propagationModelSelected != "Seleccione una opción")
         {
             btnAccept.interactable = true;
         }
     }
 
-    public void saveAntennaData ()
+    public void saveTowerData ()
     {
-        player.updateAntennaFreqBand(frequencyBandSelected);
-        player.updateAntennaTechnology(techSelected);
-        player.updateAntennaModulation(modulationSelected);
-        player.updateAntennaModulationDir(modulationDirSelected);
-        player.updateAntennaPropagationModel(propagationModelSelected);
-        player.updateAntennaModulationGain(gainSelected);
+        player.updateTowerService(serviceSelected);
+        player.updateTowerFreqBand(frequencyBandSelected);
+        player.updateTowerTechnology(techSelected);
+        player.updateTowerModulation(modulationSelected);
+        player.updateTowerPropagationModel(propagationModelSelected);
     }
 }
