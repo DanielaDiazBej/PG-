@@ -7,7 +7,7 @@ public class AntennaPropController : MonoBehaviour
 {
     public PlayerController player;
 
-    public Dropdown modulationDirDropdown;
+    public Dropdown radiationDirDropdown;
     public Dropdown gainDropdown;
 
     public Button btnAccept;
@@ -16,8 +16,8 @@ public class AntennaPropController : MonoBehaviour
 
     public string serviceSelected;
     public string typeSelected;
-    public string modulationDirSelected;
-    public string gainSelected;
+    public string radiationDirSelected = "Seleccione una opción";
+    public string gainSelected = "Seleccione una opción";
 
     // Start is called before the first frame update
     void Start()
@@ -26,44 +26,45 @@ public class AntennaPropController : MonoBehaviour
     }
 
     public void clearData () {
-        modulationDirDropdown.ClearOptions();
+        radiationDirDropdown.ClearOptions();
         gainDropdown.ClearOptions();
     }
 
-    public void assingListModulationDir()
+    public void assingListRadiationDir()
     {
         // Clear dropdown
-        modulationDirDropdown.ClearOptions();
+        radiationDirDropdown.ClearOptions();
 
         if (serviceSelected == "Televisión")
         {
             if (typeSelected == "Directiva")
             {
                 List<string> itemsMD = new List<string>() { "Selecciona una opción", "45", "60", "90" };
-                modulationDirDropdown.AddOptions(itemsMD);
+                radiationDirDropdown.AddOptions(itemsMD);
             }
-            else if (typeSelected == "Omnidireaccional")
+            else if (typeSelected == "Omnidireccional")
             {
                 List<string> itemsMD = new List<string>() { "Selecciona una opción", "360" };
-                modulationDirDropdown.AddOptions(itemsMD);
+                radiationDirDropdown.AddOptions(itemsMD);
             }
         }
         if (serviceSelected == "Punto a punto")
         {
             List<string> itemsMD = new List<string>() { "Selecciona una opción", "0", "1", "2", "3", "5", "10" };
-            modulationDirDropdown.AddOptions(itemsMD);
+            radiationDirDropdown.AddOptions(itemsMD);
         }  
     }
-    public void selectModulationDir (int val) 
+    public void selectRadiationDir (int val) 
     {
-        modulationDirSelected = modulationDirDropdown.options[val].text;    
+        radiationDirSelected = radiationDirDropdown.options[val].text;    
 
         // Validate that dropdown selected an option
-        if(gainSelected != "Seleccione una opción" && modulationDirSelected != "Seleccione una opción")
+        if(gainSelected != "Seleccione una opción" && radiationDirSelected != "Seleccione una opción")
         {
             btnAccept.interactable = true;
         }
     }
+   
     public void assingListGain()
     {
         // Clear dropdown
@@ -85,15 +86,23 @@ public class AntennaPropController : MonoBehaviour
         gainSelected = gainDropdown.options[val].text;
 
         // Validate that dropdown selected an option
-        if(gainSelected != "Seleccione una opción" && modulationDirSelected != "Seleccione una opción")
+        if(gainSelected != "Seleccione una opción" && radiationDirSelected != "Seleccione una opción")
         {
             btnAccept.interactable = true;
         }
     }
 
+    public void fillData (Antenna value)
+    {
+        if(value.radiationDirection != "---" && value.gain != "---"){
+            radiationDirDropdown.value =  int.Parse(value.radiationDirection);
+            gainDropdown.value = int.Parse(value.gain);
+        }
+    }
+    
     public void saveAntennaData ()
     {
-        player.updateAntennaModulationDir(modulationDirSelected);
-        player.updateAntennaModulationGain(gainSelected);
+        player.updateAntennaRadiationDir(radiationDirSelected);
+        player.updateAntennaGain(gainSelected);
     }
 }

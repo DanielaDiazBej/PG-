@@ -804,7 +804,7 @@ ParticleSystem:
           m_RotationOrder: 4
     arc:
       value: 360
-      mode: 0
+      mode: 1
       spread: 0
       speed:
         serializedVersion: 2
@@ -1303,16 +1303,16 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 0, b: 0, a: 1}
-        key1: {r: 1, g: 0.8591049, b: 0, a: 1}
-        key2: {r: 1, g: 1, b: 1, a: 1}
+        key0: {r: 0.018393278, g: 1, b: 0, a: 1}
+        key1: {r: 0.99235773, g: 1, b: 0.0141509175, a: 1}
+        key2: {r: 1, g: 0, b: 0, a: 1}
         key3: {r: 0, g: 0, b: 0, a: 1}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 32960
-        ctime1: 33731
+        ctime0: 0
+        ctime1: 32768
         ctime2: 65535
         ctime3: 0
         ctime4: 0
@@ -1328,7 +1328,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
-        m_NumColorKeys: 2
+        m_NumColorKeys: 3
         m_NumAlphaKeys: 2
       minGradient:
         serializedVersion: 2
@@ -4765,8 +4765,8 @@ GameObject:
   - component: {fileID: 7258464086531964370}
   - component: {fileID: 4854820925335013656}
   - component: {fileID: 7444648661963674036}
-  - component: {fileID: 8279775543504860004}
   - component: {fileID: 2112684778}
+  - component: {fileID: 6804560279727614851}
   m_Layer: 0
   m_Name: High Performance
   m_TagString: Antenna
@@ -4849,26 +4849,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.015035968, y: 0.015035966, z: 0.009760079}
   m_Center: {x: -0.0039633773, y: 0.0032127367, z: 0.004880032}
---- !u!114 &8279775543504860004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6367867328970205389}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66e5bd4a025829a4abcc0204b759f6d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: Directiva
-  modulationDirection: 
-  gain: 
-  height: 
-  inclination: 
-  direction: 
-  azimut: 
-  cover: {fileID: 5737017658156146652}
 --- !u!114 &2112684778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4882,8 +4862,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outlineMode: 0
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineColor: {r: 1, g: 0, b: 0.039215688, a: 1}
   outlineWidth: 0
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &6804560279727614851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6367867328970205389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66e5bd4a025829a4abcc0204b759f6d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: Directiva
+  radiationDirection: ---
+  gain: ---
+  height: ---
+  inclination: ---
+  azimut: ---
+  cover: {fileID: 5737017658156146652}

@@ -10,17 +10,14 @@ public class PhysicPropController : MonoBehaviour
 
     public Slider heightSlider;
     public Slider inclinationSlider;
-    public Slider directionSlider;
     public Slider azimutSlider;
 
     public TMP_InputField IFHeight;
     public TMP_InputField IFInclination;
-    public TMP_InputField IFDirection;
     public TMP_InputField IFAzimut;
 
     public string heightSelected;
     public string inclinationSelected;
-    public string directionSelected;
     public string azimutSelected;
 
     // Start is called before the first frame update
@@ -29,7 +26,6 @@ public class PhysicPropController : MonoBehaviour
         // Listen inputs to update sliders
         IFHeight.onEndEdit.AddListener(OnInputFieldChangedHeight);
         IFInclination.onEndEdit.AddListener(OnInputFieldChangedInclination);
-        IFDirection.onEndEdit.AddListener(OnInputFieldChangedDirection);
         IFAzimut.onEndEdit.AddListener(OnInputFieldChangedAzimut);
     }
 
@@ -73,26 +69,6 @@ public class PhysicPropController : MonoBehaviour
             IFInclination.text = inclinationSlider.value.ToString("F");
         }
     }
-    private void OnInputFieldChangedDirection(string newText)
-    {
-        if (float.TryParse(newText, out var value))
-        {
-            value = Mathf.Clamp(value, directionSlider.minValue, directionSlider.maxValue);
-
-            // Update input
-            IFDirection.text = value.ToString("F");
-            // Update slider
-            directionSlider.value = value;
-            // Update selection
-            directionSelected = value.ToString("F");
-        }
-        else
-        {
-            Debug.LogWarning("Input Format Error!", this);
-            directionSlider.value = Mathf.Clamp(0, directionSlider.minValue, directionSlider.maxValue);
-            IFDirection.text = directionSlider.value.ToString("F");
-        }
-    }
     private void OnInputFieldChangedAzimut(string newText)
     {
         if (float.TryParse(newText, out var value))
@@ -128,13 +104,6 @@ public class PhysicPropController : MonoBehaviour
         // Update selection
         inclinationSelected = value.ToString("F");
     }
-    public void selectDirection (float value)
-    {
-        // Update input
-        IFDirection.text = value.ToString("F");
-        // Update selection
-        directionSelected = value.ToString("F");
-    }
     public void selectAzimut (float value)
     {
         // Update input
@@ -143,11 +112,25 @@ public class PhysicPropController : MonoBehaviour
         azimutSelected = value.ToString("F");
     }
 
+    public void fillData (Antenna value)
+    {
+        if(value.height != "---" && value.inclination != "---" && value.azimut != "---"){
+            heightSlider.value =  float.Parse(value.height);
+            inclinationSlider.value = float.Parse(value.inclination);
+            azimutSlider.value = float.Parse(value.azimut);
+        }
+        else
+        {
+            heightSlider.value =  80f;
+            inclinationSlider.value = 0f;
+            azimutSlider.value = 0f;
+        }
+    }
+
     public void saveAntennaData ()
     {
         player.updateAntennaHeight(heightSelected);
         player.updateAntennaInclination(inclinationSelected);
-        player.updateAntennaDirection(directionSelected);
         player.updateAntennaAzimut(azimutSelected);
     }
 }

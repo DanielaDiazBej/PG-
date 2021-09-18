@@ -23,6 +23,7 @@ public class ServicePropController : MonoBehaviour
     public string modulationSelected;
     public string propagationModelSelected;
     // Start is called before the first frame update
+
     void Start()
     {
         frequencyBandDropdown.interactable = false;
@@ -67,6 +68,9 @@ public class ServicePropController : MonoBehaviour
         modulationDropdown.ClearOptions();
         propagationModelDropdown.interactable = false;
         propagationModelDropdown.ClearOptions();
+
+        // Disable button
+        btnAccept.interactable = false;
         
         // Enable the next dropdown
         assingListFrequencyBand();
@@ -101,6 +105,9 @@ public class ServicePropController : MonoBehaviour
         modulationDropdown.ClearOptions();
         propagationModelDropdown.interactable = false;
         propagationModelDropdown.ClearOptions();
+
+        // Disable button
+        btnAccept.interactable = false;
         
         // Enable the next dropdown
         assingListTech();
@@ -133,6 +140,11 @@ public class ServicePropController : MonoBehaviour
         // Clear the next dropdowns
         modulationDropdown.interactable = false;
         modulationDropdown.ClearOptions();
+        propagationModelDropdown.interactable = false;
+        propagationModelDropdown.ClearOptions();
+
+        // Disable button
+        btnAccept.interactable = false;
         
         // Enable the next dropdown
         assingListModulation();
@@ -170,6 +182,9 @@ public class ServicePropController : MonoBehaviour
         // Clear the next dropdowns
         propagationModelDropdown.interactable = false;
         propagationModelDropdown.ClearOptions();
+
+        // Disable button
+        btnAccept.interactable = false;
         
         // Enable the next dropdown
         assingListPropagationModel();
@@ -201,6 +216,17 @@ public class ServicePropController : MonoBehaviour
         if(propagationModelSelected != "Seleccione una opción")
         {
             btnAccept.interactable = true;
+        }
+    }
+
+    public void fillData (Service value)
+    {
+        if(value.service != "---" && value.frequencyBand != "---" && value.technology != "---" && value.modulation != "---" && value.propagationModel != "---"){
+            serviceDropdown.value =  int.Parse(value.service);
+            frequencyBandDropdown.value = int.Parse(value.frequencyBand);
+            techDropdown.value = int.Parse(value.technology);
+            modulationDropdown.value = int.Parse(value.modulation);
+            propagationModelDropdown.value = int.Parse(value.propagationModel);
         }
     }
 
