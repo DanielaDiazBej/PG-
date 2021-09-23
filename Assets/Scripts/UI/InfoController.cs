@@ -55,7 +55,7 @@ public class InfoController : MonoBehaviour
 
     public void updateTowerData(Service value)
     {
-        txServiceValue.text = value.service;
+        txServiceValue.text = value.type;
         txFrequencyValue.text = value.frequencyBand;
         txTechValue.text = value.technology;
         txModulationValue.text = value.modulation;

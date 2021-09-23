@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour
                         tempTowerSelected = towerController;
 
                         // Show services creates in the buttons
-                        serviceController.updateServicesSelected(tempTowerSelected.services[0].service, tempTowerSelected.services[1].service);
+                        serviceController.updateServicesSelected(tempTowerSelected.services[0].type, tempTowerSelected.services[1].type);
                         panelServices.showHidePanel();                                                
                     }
 
@@ -151,7 +151,7 @@ public class PlayerController : MonoBehaviour
                             infoController.updateAntennaData(tempAntennaSelected);
 
                             // Send data of tower and antenna to the panel
-                            antennaPropController.serviceSelected = tempTowerSelected.services[serviceSelected].service;
+                            antennaPropController.serviceSelected = tempTowerSelected.services[serviceSelected].type;
                             antennaPropController.typeSelected = tempAntennaSelected.type;
                             antennaPropController.assingListRadiationDir();
                             antennaPropController.assingListGain();
@@ -264,7 +264,7 @@ public class PlayerController : MonoBehaviour
         // Clear info controller
         infoController.clearData();
 
-        if(tempTowerSelected.services[value].service == "---"){          
+        if(tempTowerSelected.services[value].type == "---"){          
             servicePropController.clearData();
             servicePropController.assingListServices();
             panelPropServices.showHidePanel();            
@@ -286,7 +286,7 @@ public class PlayerController : MonoBehaviour
    
     // Called from service prop panel
     public void updateTowerService (string value){
-        tempTowerSelected.services[serviceSelected].service = value;
+        tempTowerSelected.services[serviceSelected].type = value;
         infoController.setService(value);
     }
     public void updateTowerFreqBand (string value){
@@ -358,7 +358,7 @@ public class PlayerController : MonoBehaviour
     {
         bool res = true;
 
-        string currentService = tempTowerSelected.services[serviceSelected].service;
+        string currentService = tempTowerSelected.services[serviceSelected].type;
         if(currentService == "Punto a punto")
         {
             if(value == "Omnidireccional"){

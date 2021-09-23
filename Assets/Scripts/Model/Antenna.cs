@@ -25,6 +25,7 @@ public class Antenna : MonoBehaviour
         cover.SetActive(true);
         isShowCover = true;
     }
+    
     public void hideCover (){
         cover.SetActive(false);
         isShowCover = false;

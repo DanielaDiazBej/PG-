@@ -221,8 +221,8 @@ public class ServicePropController : MonoBehaviour
 
     public void fillData (Service value)
     {
-        if(value.service != "---" && value.frequencyBand != "---" && value.technology != "---" && value.modulation != "---" && value.propagationModel != "---"){
-            serviceDropdown.value =  int.Parse(value.service);
+        if(value.type != "---" && value.frequencyBand != "---" && value.technology != "---" && value.modulation != "---" && value.propagationModel != "---"){
+            serviceDropdown.value =  int.Parse(value.type);
             frequencyBandDropdown.value = int.Parse(value.frequencyBand);
             techDropdown.value = int.Parse(value.technology);
             modulationDropdown.value = int.Parse(value.modulation);

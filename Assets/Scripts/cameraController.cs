@@ -175,13 +175,13 @@ public class cameraController : MonoBehaviour
         if(mode3D)
         {
             rotationCamera.x = 40;
-            rotationCamera.y = 180;
+            rotationCamera.y = 0;
             rotationCamera.z = 0;
         }
         else
         {
             rotationCamera.x = 90;
-            rotationCamera.y = 180;
+            rotationCamera.y = 0;
             rotationCamera.z = 0;
         }
 
