@@ -95,8 +95,8 @@ public class AntennaPropController : MonoBehaviour
     public void fillData (Antenna value)
     {
         if(value.radiationDirection != "---" && value.gain != "---"){
-            radiationDirDropdown.value =  int.Parse(value.radiationDirection);
-            gainDropdown.value = int.Parse(value.gain);
+            radiationDirDropdown.value =  radiationDirDropdown.options.FindIndex(option => option.text == value.radiationDirection);
+            gainDropdown.value = gainDropdown.options.FindIndex(option => option.text == value.gain);
         }
     }
     

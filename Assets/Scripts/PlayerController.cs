@@ -14,10 +14,10 @@ public class PlayerController : MonoBehaviour
     private Vector3 Point;
 
     // UI
-    public GameObject panelErrorAntenna;
     public CanvasController canvasController;
     public PanelsController panelPropServices;
     public PanelsController panelServices;
+    public GameObject panelPower;
 
     // UI Controllers
     public ServiceController serviceController;
@@ -26,23 +26,35 @@ public class PlayerController : MonoBehaviour
     public PhysicPropController physicPropController;
     public InfoController infoController;
     public InstructionController instructionController;
+    public ErrorController panelErrorAntenna;
 
     // The object of last tower selected
     private TowerController tempTowerSelected;
+    private GameObject tempTowerSelectedGO;
     public List<GameObject> TowersPrefab;
     public int towerSelected = 0;
     public int serviceSelected = -1;
 
+    // The service of the P2P antenna
+    private Service tempServiceP2P;
+
     // The object of last antenna selected
     private Antenna tempAntennaSelected;
+    private Antenna tempAntennaSelectedP2P;
+    private GameObject tempAntennaSelectedGO;
+    private GameObject tempAntennaSelectedP2PGO;
     private Outline tempOutlinerAntennaSelected;
     public List<GameObject> AntennasPrefab;
     public int antennaSelected = 0;
+
+    // Wave Controller
+    public WaveController waveController;
 
     // Modes
     private bool towerMode = false;
     private bool antennaMode = false;
     private bool physicPMode = false;
+    private bool p2pMode = false;
 
     // Save all outline of towers and antennas
     private List<Outline> towersOutlines = new List<Outline>();
@@ -77,17 +89,23 @@ public class PlayerController : MonoBehaviour
                     {
                         // Add antenna model to the tower
                         Point = hit.point;
-                        Instantiate(AntennasPrefab[antennaSelected], Point, Quaternion.identity);
+                        GameObject newAntenna = Instantiate(AntennasPrefab[antennaSelected], Point, Quaternion.identity);
+                        newAntenna.transform.SetParent(tempTowerSelectedGO.transform.parent);
+                        //newAntenna.transform.localPosition = new Vector3(newAntenna.transform.localPosition.x, newAntenna.transform.localPosition.y, 0.5f);
+
                         // Disable antenna mode
                         setAntennaMode(false);
                         canvasController.changeBtAntenna(false);
+
+                        // Disable P2P mode
+                        setP2PMode(false);
                     }else if (hit.transform.tag == "Tower"){
                         // Deselect the las tower and antenna
                         deselectAllTowers();
                         deselectAllAntennas();
 
                         // Hide cover
-                        if(tempAntennaSelected){                            
+                        if(tempAntennaSelected){
                             tempAntennaSelected.hideCover();
                         }
 
@@ -95,10 +113,13 @@ public class PlayerController : MonoBehaviour
                         canvasController.changeBtPhysicalP(false);
                         canvasController.changeBtAntenna(false);
                         canvasController.changeBtCover(false);
+                        //Hide panel
+                        panelPower.SetActive(false);
 
                         // Select tower
                         TowerController towerController = hit.collider.gameObject.GetComponent<TowerController>();
                         Outline outlineTowerController = hit.collider.gameObject.GetComponent<Outline>();
+                        GameObject tower = hit.collider.gameObject;
 
                         // Save outline
                         towersOutlines.Add(outlineTowerController);
@@ -106,18 +127,44 @@ public class PlayerController : MonoBehaviour
                         outlineTowerController.OutlineWidth = 3f;
 
                         tempTowerSelected = towerController;
+                        tempTowerSelectedGO = tower;
 
                         // Show services creates in the buttons
                         serviceController.updateServicesSelected(tempTowerSelected.services[0].type, tempTowerSelected.services[1].type);
-                        panelServices.showHidePanel();                                                
+                        panelServices.showHidePanel();
+
+                        // Disable P2P mode
+                        setP2PMode(false);                                            
                     }
 
                     // If the hit was with a antenna object
-                    if (hit.transform.tag == "Antenna" && physicPMode)
+                    if (hit.transform.tag == "Antenna" && p2pMode)
+                    {
+                        // Data of service
+                        TowerController towerController = hit.collider.gameObject.transform.parent.parent.GetComponentInChildren<TowerController>();
+                        if(towerController.services[0].type == "Punto a punto"){
+                            tempServiceP2P = towerController.services[0];
+                        }else{
+                            tempServiceP2P = towerController.services[1];
+                        }
+
+                        // Get controller and game object
+                        GameObject antenna = hit.collider.gameObject;
+                        Antenna antennaController = hit.collider.gameObject.GetComponent<Antenna>();
+
+                        // Save in temp
+                        tempAntennaSelectedP2PGO = antenna;
+                        tempAntennaSelectedP2P = antennaController;
+
+                        showCoverP2P();
+                    }else if (hit.transform.tag == "Antenna" && physicPMode)
                     {
                         // Disable the antenna mode
                         setPhysicPMode(false);
                         canvasController.changeBtPhysicalP(false);
+
+                        // Disable P2P mode
+                        setP2PMode(false);
                     }else if (hit.transform.tag == "Antenna"){
                         // Deselect the last antenna
                         deselectAllAntennas();
@@ -125,18 +172,24 @@ public class PlayerController : MonoBehaviour
 
                         // Disbale buttons
                         canvasController.changeBtCover(false);
+                        //Hide panel
+                        panelPower.SetActive(false);
+
+                        // Disable P2P mode
+                        setP2PMode(false);
 
                         // Hide cover
-                        if(tempAntennaSelected){                            
+                        if(tempAntennaSelected){
                             tempAntennaSelected.hideCover();
                         }
 
-                        // Select antenna
-                        Antenna antennaController = hit.collider.gameObject.GetComponent<Antenna>();
-                        Outline outlineAntennaController = hit.collider.gameObject.GetComponent<Outline>();                        
+                            // Select antenna
+                            Antenna antennaController = hit.collider.gameObject.GetComponent<Antenna>();
+                            Outline outlineAntennaController = hit.collider.gameObject.GetComponent<Outline>();
+                            GameObject antenna = hit.collider.gameObject;
 
-                        // Valid antenna and service
-                        bool validAntenna = verifyAntenna(antennaController.type); 
+                            // Valid antenna and service
+                            bool validAntenna = verifyAntenna(antennaController.type); 
 
                         if(validAntenna)
                         {                        
@@ -144,6 +197,7 @@ public class PlayerController : MonoBehaviour
                             antennasOutlines.Add(outlineAntennaController);
 
                             tempAntennaSelected = antennaController;
+                            tempAntennaSelectedGO = antenna;
                             tempOutlinerAntennaSelected = outlineAntennaController;
                             tempOutlinerAntennaSelected.OutlineWidth = 2f;
 
@@ -160,15 +214,24 @@ public class PlayerController : MonoBehaviour
                             antennaPropController.fillData(tempAntennaSelected);
                             physicPropController.fillData(tempAntennaSelected);
 
+                            // Disable or enable azimut and inclination
+                            if(tempTowerSelected.services[serviceSelected].type == "Punto a punto"){
+                                physicPropController.changeStateAzimut(false);
+                                physicPropController.changeStateInclination(false);
+                            } else{
+                                physicPropController.changeStateAzimut(true);
+                                physicPropController.changeStateInclination(true);
+                            }
+
                             // Enable antenna button
                             canvasController.changeBtPhysicalP(true);
                             // Disable tower button
                             canvasController.changeBtTower(false);
-                        } 
+                        }
                         else
                         {
                             // Show panel error
-                            panelErrorAntenna.SetActive(true);
+                            panelErrorAntenna.showPanel();
                         }
                     }
                 
@@ -187,6 +250,11 @@ public class PlayerController : MonoBehaviour
                         canvasController.changeBtPhysicalP(false);
                         canvasController.changeBtAntenna(false);
                         canvasController.changeBtCover(false);
+                        //Hide panel
+                        panelPower.SetActive(false);
+
+                        // Disable P2P mode
+                        setP2PMode(false);
                     }           
                 }
             }
@@ -206,6 +274,11 @@ public class PlayerController : MonoBehaviour
         else if(towerMode)
         {
             instructionController.updateValue("Ubica la torre en una de la zonas oscuras");
+            // Show panel
+            instructionController.showPanel();
+        }
+        else if(p2pMode){
+            instructionController.updateValue("Selecciona otra antena con servicio punto a punto");
             // Show panel
             instructionController.showPanel();
         }
@@ -243,7 +316,7 @@ public class PlayerController : MonoBehaviour
         {
             setAntennaMode(false);
             // Show panel error
-            panelErrorAntenna.SetActive(true);
+            panelErrorAntenna.showPanel();
 
             // Deselect the last antenna
             deselectAllAntennas();
@@ -257,6 +330,10 @@ public class PlayerController : MonoBehaviour
     // Called from button of physic parameters
     public void setPhysicPMode (bool value) {
         antennaMode = value;
+    }
+
+    public void setP2PMode (bool value) {
+        p2pMode = value;
     }
     
     // Called from service panel
@@ -321,23 +398,82 @@ public class PlayerController : MonoBehaviour
         tempAntennaSelected.height = value;
         canvasController.changeBtCover(true);
         infoController.setHeight(value);
+
+        float height = Remap(float.Parse(value), 0, 150, 0, 45);
+        Debug.Log(height);
+        //tempAntennaSelectedGO.transform.position = new Vector3(tempAntennaSelectedGO.transform.position.x, height, tempAntennaSelectedGO.transform.position.z);
+        tempAntennaSelectedGO.transform.parent.transform.localPosition = new Vector3(tempAntennaSelectedGO.transform.parent.transform.localPosition.x, height, tempAntennaSelectedGO.transform.parent.transform.localPosition.z);
     }
     public void updateAntennaInclination (string value){
         tempAntennaSelected.inclination = value;
         canvasController.changeBtCover(true);
-        infoController.setInclination(value);
+        infoController.setInclination(value);        
     }
     public void updateAntennaAzimut (string value){
         tempAntennaSelected.azimut = value;
         canvasController.changeBtCover(true);
-        infoController.setAzimut(value);
+        infoController.setAzimut(value);        
+    }
+
+    // Called from wave controller
+    public void updateAntennaDistance (string value){
+        infoController.setDistance(value);     
+    }
+
+    // Antenna Actions
+    public void rotateAntenna(float inclination, float azimut){
+        if(tempAntennaSelectedGO.transform.name != "High Performance"){
+            tempAntennaSelectedGO.transform.localRotation = Quaternion.Euler(tempAntennaSelectedGO.transform.localRotation.x, 90f, -inclination);
+        }else{
+            tempAntennaSelectedGO.transform.localRotation = Quaternion.Euler(-inclination, tempAntennaSelectedGO.transform.localRotation.y, tempAntennaSelectedGO.transform.localRotation.z);
+        }
+        tempAntennaSelectedGO.transform.parent.transform.localRotation = Quaternion.Euler(tempAntennaSelectedGO.transform.parent.transform.localRotation.x, azimut, tempAntennaSelectedGO.transform.parent.transform.localRotation.z);
+    }
+
+    // Tower Actions
+    public void deleteTower(){
+        Destroy(tempTowerSelectedGO.transform.parent.gameObject);
+
+        tempTowerSelectedGO = null;
+        tempTowerSelected = null;
     }
 
     // Show the cover of the wave
     public void showHideCover(){
         if(tempAntennaSelected){
-            tempAntennaSelected.showHideCover();
-            tempOutlinerAntennaSelected.OutlineWidth = 0f;
+            if(tempTowerSelected.services[serviceSelected].type == "Punto a punto"){
+                setP2PMode(true);                
+            }else{
+                tempAntennaSelected.showHideCover();
+                tempOutlinerAntennaSelected.OutlineWidth = 0f;
+                waveController.calculateWave(tempAntennaSelected, tempTowerSelected.services[serviceSelected]);
+            }
+        }
+        Debug.Log(p2pMode);
+    }
+
+    public void showCoverP2P(){
+        if(tempAntennaSelectedGO && tempAntennaSelectedP2PGO){
+            if(tempAntennaSelectedP2P.radiationDirection == "---" || tempAntennaSelectedP2P.gain == "---"){
+                panelErrorAntenna.updateValue("Debes configurar los parámetros de ambas antenas");
+                panelErrorAntenna.showPanel();
+            }else{
+            tempAntennaSelected.rotateAnntena.antennaTarget = tempAntennaSelectedP2PGO.transform;
+                tempAntennaSelectedP2P.rotateAnntena.antennaTarget = tempAntennaSelectedGO.transform;
+
+                tempAntennaSelected.rotateAnntena.activeRotation();
+                tempAntennaSelectedP2P.rotateAnntena.activeRotation();
+
+                tempAntennaSelected.showHideCover();
+                waveController.calculateWave(tempAntennaSelected, tempTowerSelected.services[serviceSelected]);
+
+                tempAntennaSelectedP2P.showHideCover();
+                waveController.calculateWave(tempAntennaSelectedP2P, tempServiceP2P);
+
+                tempOutlinerAntennaSelected.OutlineWidth = 0f;
+
+                setP2PMode(false);
+            }
         }
     }
 
@@ -378,4 +514,8 @@ public class PlayerController : MonoBehaviour
          EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
          return results.Count > 0;
      }
+
+    public float Remap (float value, float from1, float to1, float from2, float to2) {
+        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
+    }
 }

@@ -14,7 +14,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 14
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!65 &3454192140321643832
 BoxCollider:
@@ -42,12 +42,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   services:
-  - service: ---
+  - type: ---
     frequencyBand: ---
     technology: ---
     modulation: ---
     propagationModel: ---
-  - service: ---
+  - type: ---
     frequencyBand: ---
     technology: ---
     modulation: ---

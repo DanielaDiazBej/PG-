@@ -13,6 +13,10 @@ public class Antenna : MonoBehaviour
     public string azimut = "---";
 
     public GameObject cover;
+
+    public RotateAnntena rotateAnntena;
+
+    public ParticleSystem coverParticle;
     private bool isShowCover = false;
 
     public void showHideCover()

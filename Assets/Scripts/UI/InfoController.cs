@@ -17,6 +17,7 @@ public class InfoController : MonoBehaviour
     public TextMeshProUGUI txHeightValue;
     public TextMeshProUGUI txInclinationValue;
     public TextMeshProUGUI txAzimutValue;
+    public TextMeshProUGUI txDistanceValue;
     
     public void setService(string value){
         txServiceValue.text = value;
@@ -38,7 +39,6 @@ public class InfoController : MonoBehaviour
     }
     public void setRadiationDir(string value){
         txRadiationDirValue.text = value;
-        Debug.Log(value);
     }
     public void setGain(string value){
         txGainValue.text = value;
@@ -51,6 +51,9 @@ public class InfoController : MonoBehaviour
     }
     public void setAzimut(string value){
         txAzimutValue.text = value;
+    }
+    public void setDistance(string value){
+        txDistanceValue.text = value;
     }
 
     public void updateTowerData(Service value)

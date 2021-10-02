@@ -29,6 +29,15 @@ public class PhysicPropController : MonoBehaviour
         IFAzimut.onEndEdit.AddListener(OnInputFieldChangedAzimut);
     }
 
+    public void changeStateAzimut(bool value){
+        azimutSlider.interactable = value;
+        IFAzimut.interactable = value;
+    }
+    public void changeStateInclination(bool value){
+        inclinationSlider.interactable = value;
+        IFInclination.interactable = value;
+    }
+
     private void OnInputFieldChangedHeight(string newText)
     {
         if (float.TryParse(newText, out var value))
@@ -114,7 +123,7 @@ public class PhysicPropController : MonoBehaviour
 
     public void fillData (Antenna value)
     {
-        if(value.height != "---" && value.inclination != "---" && value.azimut != "---"){
+        if(value.height != "---" && value.height != "" && value.inclination != "---" && value.inclination != "" && value.azimut != "---" && value.azimut != ""){
             heightSlider.value =  float.Parse(value.height);
             inclinationSlider.value = float.Parse(value.inclination);
             azimutSlider.value = float.Parse(value.azimut);
@@ -132,5 +141,7 @@ public class PhysicPropController : MonoBehaviour
         player.updateAntennaHeight(heightSelected);
         player.updateAntennaInclination(inclinationSelected);
         player.updateAntennaAzimut(azimutSelected);
+
+        player.rotateAntenna(float.Parse(inclinationSelected), float.Parse(azimutSelected));
     }
 }

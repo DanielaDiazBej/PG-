@@ -129,7 +129,7 @@ public class cameraController : MonoBehaviour
             moveDirection.y += 0;
             moveDirection.z -= movementAmountZ;            
 
-            myCameraController.Move(moveDirection * Time.deltaTime);
+            myCameraController.Move(-moveDirection * Time.deltaTime);
         }
         
     }
